@@ -28,7 +28,6 @@ var
   address, save_file_name: string;
   protocol, type_attack: shortint;
   p: Ping;
-  w: WebClient;
   res: PingReply;
   d: DateTime;
   save_file: PABCSystem.Text;
@@ -53,6 +52,8 @@ begin
 end;
 
 procedure http_flood_attack();
+var
+  w: WebClient;
 begin
   w := new WebClient();
   w.DownloadString(address);
