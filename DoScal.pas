@@ -32,6 +32,7 @@ var
   d: DateTime;
   save_file: PABCSystem.Text;
   thread_k: integer;
+  tb: array of BTask;
 
 procedure log(mess: string);
 begin
@@ -99,7 +100,7 @@ begin
       Writeln('Enter the number of threads (recommended 10-50):');
       Readln(thread_k);
     until (thread_k > 0);
-    var tb := new BTask[thread_k];
+    tb := new BTask[thread_k];
     protocol := -1;
     if type_attack = 1 then
       repeat
