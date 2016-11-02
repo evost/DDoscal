@@ -69,7 +69,7 @@ begin
     ClearLine;
     GotoXY(1, 7);
     Writeln('+' + thread_k + ' packages in ' + MillisecondsDelta + ' ms.');
-    Writeln('Total: ' + thread_sum + ' packages in ' + (Milliseconds - t) / 1000 + 's.');
+    Writeln('Total: ' + thread_sum + ' packages in ' + (Milliseconds - t) / 1000 + ' s.');
   end;
 end;
 
@@ -88,7 +88,7 @@ begin
     Readln(address);
     p := new Ping();
     res := p.Send(address);
-    log('New connection ' + address + ' ' + res.Address.ToString + ' ' + res.RoundtripTime.ToString + ' мс');
+    log('New connection ' + address + ' ' + res.Address.ToString + ' ' + res.RoundtripTime.ToString + ' ms');
     repeat
       Writeln('Select the type of attack:');
       Writeln('[0] - ping-flood (weak, less traffic)');
