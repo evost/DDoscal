@@ -104,8 +104,8 @@ begin
     if type_attack = 1 then
       repeat
         Writeln('Select protocol:');
-        Writeln('[0] - HTTP  (80  порт)');
-        Writeln('[1] - HTTPS (443 порт)');
+        Writeln('[0] - HTTP  (80  port)');
+        Writeln('[1] - HTTPS (443 port)');
         Readln(protocol);
       until (protocol = 0) or (protocol = 1);
     if protocol = 0 then
